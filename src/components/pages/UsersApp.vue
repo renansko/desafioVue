@@ -31,14 +31,14 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="person in users" :key="person.email">
-                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ person.name }}</td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ person.company }}</td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ person.email }}</td>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ person.data }}</td>
+                <tr v-for="user in users" :key="user.email">
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ user.name }}</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ user.email }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ user.phone }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ user.created_at }}</td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                     <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                      >Editar<span class="sr-only">, {{ person.name }}</span></a
+                      >Editar<span class="sr-only">, {{ user.name }}</span></a
                     >
                   </td>
                 </tr>
@@ -52,26 +52,25 @@
 
 </template>
 
+<script setup>
 
-<script>
+import {onMounted, ref} from "vue";
 
-export default {
-  name: 'UsersApp',
-  data() {
+const users = ref([])
 
-    return {
-      users : [
-          { name: 'Fulano da Silva', company: 'E-Inov Soluções Tecnológicas', email: 'fulano.silva@example.com', data: '2022-01-05' },
-          { name: 'Fulano da Silva 2', company: 'E-Inov Soluções Tecnológicas', email: 'fulano.silva2@example.com', data: '2022-01-16' },
-          { name: 'Fulano da Silva 3', company: 'E-Inov Soluções Tecnológicas', email: 'fulano.silva3@example.com', data: '2022-01-27' },
-          { name: 'Fulano da Silva 4', company: '', email: 'fulano.silva4@example.com', data: '2022-02-09' },
-          { name: 'Beltrano da Silva', company: '', email: 'beltrano.silva@example.com', data: '2022-04-27' },
-          { name: 'Beltrano da Silva 2', company: 'Guest Posts', email: 'beltrano.silva2@example.com', data: '2022-04-29' },
-          { name: 'Beltrano da Silva 3', company: 'Guest Posts', email: 'beltrano.silva3@example.com', data: '2022-05-02' },
-          { name: 'Beltrano da Silva 4', company: 'Guest Posts', email: 'beltrano.silva4@example.com', data: '2022-05-27' },
-        ]
+onMounted(() => {
+
+    getUsers()
+
+})
+
+const getUsers = async () => {
+    try {
+        const response = await fetch(  process.env.VUE_APP_BACKEND_URL + '/users');
+        users.value = await response.json();
+    } catch (error) {
+        console.error(error);
     }
-  }
 }
 
 </script>

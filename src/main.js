@@ -23,4 +23,11 @@ const router = createRouter({
     linkActiveClass: 'link-active',
 })
 
-createApp(App).use(router).mount('#app')
+const app = createApp(App)
+
+app.config.globalProperties.urlBackend = 'https://desafio.test'
+
+app.use(router)
+app.mount('#app')
+
+
