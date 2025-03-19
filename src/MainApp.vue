@@ -21,7 +21,7 @@
               </TransitionChild>
               <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div class="items-center px-4">
-                  <img class="h-16 w-auto mx-auto" src="../assets/einov.jpg" alt="Workflow" />
+                  <img class="h-16 w-auto mx-auto" src="./assets/einov.jpg" alt="Workflow" />
                 </div>
                 <nav class="mt-5 px-2 space-y-1">
 
@@ -37,7 +37,14 @@
                 
                 </nav>
               </div>
-             
+              <div class="p-4 border-t">
+                <button
+                  @click="toggleTheme"
+                  class="w-full px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-opacity-80 transition-all"
+                >
+                  {{ isDark ? 'Modo Claro' : 'Modo Escuro' }}
+                </button>
+              </div>
             </DialogPanel>
           </TransitionChild>
           <div class="flex-shrink-0 w-14">
@@ -54,7 +61,7 @@
         <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
           <div class="items-center px-4">
             <router-link :to="{name: 'home'}">
-              <img class="h-16 w-auto mx-auto" src="../assets/einov.jpg" alt="E-Inov desafio Vue.js" />
+              <img class="h-16 w-auto mx-auto" src="./assets/einov.jpg" alt="E-Inov desafio Vue.js" />
             </router-link>
             
           </div>
@@ -72,11 +79,27 @@
          
           </nav>
         </div>
-       
+        <div class="p-4 mt-auto">
+          <button
+            @click="toggleTheme"
+            class="px-4 py-2 rounded bg-primary text-primary-foreground"
+          >
+            {{ isDark ? 'Modo Claro' : 'Modo Escuro' }}
+          </button>
+        </div>
       </div>
     </div>
     <div class="md:pl-64 flex flex-col flex-1">
       <div class="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">
+        <div class="flex items-center gap-2">
+          <button @click="sidebarOpen = true">...</button>
+          <button
+            @click="toggleTheme"
+            class="px-4 py-2 rounded bg-primary text-primary-foreground"
+          >
+            {{ isDark ? '🌙' : '☀️' }}
+          </button>
+        </div>
         <button type="button" class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" @click="sidebarOpen = true">
           <span class="sr-only">Open sidebar</span>
           <MenuIcon class="h-6 w-6" aria-hidden="true" />
@@ -90,6 +113,7 @@
         </div>
       </main>
     </div>
+  
   </div>
 </template>
 
@@ -103,20 +127,22 @@ import {
   UsersIcon,
   XIcon,
 } from '@heroicons/vue/outline'
+import useTheme from '@/composables/useTheme'
+const { isDark, toggleTheme } = useTheme()
 
 const navigation = [
   { name: 'Home', router: {name: 'home'}, icon: HomeIcon, current: true },
   { name: 'Usuários', router: {name: 'users'}, icon: UsersIcon, current: false },
 ]
 
-const sidebarOpen = ref(false)
+const sidebarOpen = ref(true)
 </script>
 
-<style>
+<!-- <style>
 .link-active {
 
-    background-color: #e9eaeb;
+    background-color: var(--theme-primary-light);
     color: #4a5568;
     border-radius: 4px;
 }
-</style>
+</style> -->

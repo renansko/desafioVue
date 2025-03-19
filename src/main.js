@@ -2,18 +2,19 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router';
 
-import './css/app.css';
+import './styles/app.css';
+import useTheme from './composables/useTheme'
 
 const routes = [
     { 
         path: '/', 
         name: 'home', 
-        component: () => import('./components/pages/HomeApp.vue'),
+        component: () => import('./views/HomeApp.vue'),
     },
     { 
         path: '/users', 
         name: 'users', 
-        component: () => import('./components/pages/UsersApp.vue') 
+        component: () => import('./views/UsersApp.vue') 
     },
   ]
 
@@ -22,6 +23,10 @@ const router = createRouter({
     routes, 
     linkActiveClass: 'link-active',
 })
+
+const { initTheme } = useTheme()
+initTheme()
+
 
 const app = createApp(App)
 
