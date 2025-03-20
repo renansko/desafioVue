@@ -1,36 +1,16 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { createRouter, createWebHistory } from 'vue-router';
-
-import './styles/app.css';
+import router from './router'
+import './assets/main.css'
 import useTheme from './composables/useTheme'
-
-const routes = [
-    { 
-        path: '/', 
-        name: 'home', 
-        component: () => import('./views/HomeApp.vue'),
-    },
-    { 
-        path: '/users', 
-        name: 'users', 
-        component: () => import('./views/UsersApp.vue') 
-    },
-  ]
-
-const router = createRouter({
-    history: createWebHistory(),
-    routes, 
-    linkActiveClass: 'link-active',
-})
 
 const { initTheme } = useTheme()
 initTheme()
 
-
 const app = createApp(App)
 
-app.config.globalProperties.urlBackend = 'https://desafio.test'
+// Add global property for backend URL (you can remove this if using env variables)
+app.config.globalProperties.urlBackend = process.env.VUE_APP_BACKEND_URL || 'http://127.0.0.1:8000'
 
 app.use(router)
 app.mount('#app')
