@@ -9,7 +9,6 @@ initTheme()
 
 const app = createApp(App)
 
-// Add global property for backend URL (you can remove this if using env variables)
 app.config.globalProperties.urlBackend = process.env.VUE_APP_BACKEND_URL || 'http://127.0.0.1:8000'
 
 app.use(router)

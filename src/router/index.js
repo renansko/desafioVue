@@ -3,6 +3,12 @@ import authService from '@/services/authService';
 
 const routes = [
   { 
+    path: '/', 
+    redirect: () => {
+      return authService.isAuthenticated() ? '/home' : '/login'
+    }
+  },
+  { 
     path: '/login', 
     name: 'login',
     component: () => import('@/views/LoginView.vue'),
@@ -12,7 +18,7 @@ const routes = [
     }
   },
   { 
-    path: '/', 
+    path: '/home', 
     name: 'home', 
     component: () => import('@/views/HomeApp.vue'),
     meta: { 
@@ -29,6 +35,19 @@ const routes = [
       layout: 'default'
     }
   },
+  { 
+    path: '/user/:id/news', 
+    name: 'user-news', 
+    component: () => import('@/views/UserNewsAppPage.vue'),
+    meta: { 
+      requiresAuth: true,
+      layout: 'default'
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/login'
+  }
 ]
 
 const router = createRouter({
@@ -37,7 +56,6 @@ const router = createRouter({
   linkActiveClass: 'link-active',
 })
 
-// Navigation guard to check auth
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = authService.isAuthenticated();
@@ -45,7 +63,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !isAuthenticated) {
     next('/login');
   } else if (to.path === '/login' && isAuthenticated) {
-    next('/');
+    next('/home');
   } else {
     next();
   }

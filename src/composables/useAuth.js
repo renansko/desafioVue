@@ -14,14 +14,30 @@ export default function useAuth() {
     error.value = null;
     
     try {
-      const response = await authService.login(email, password);
-      user.value = response.user;
-      router.push('/'); // Redirect to home after successful login
-      return true;
+      const response = await api.post('/login', { email, password });
+      if (response.data.token) {
+        localStorage.setItem('auth_token', response.data.token);
+        console.log(response)
+        localStorage.setItem('user', JSON.stringify(response.data || {}));
+        user.value = response.user;
+        router.push('/home');
+        return response.data;
+      }
     } catch (err) {
       console.error('Login error:', err);
-      error.value = err.response?.data?.message || 'Login failed';
-      return false;
+      // Handle Laravel error messages
+      if (err.response && err.response.data) {
+        if (err.response.status === 422) {
+          // This is a validation error, let the component handle it
+          throw err;
+        } else {
+          // This is a general error
+          error.value = err.response.data.message || 'Login failed';
+        }
+      } else {
+        error.value = 'Network error occurred';
+      }
+      throw err;
     } finally {
       loading.value = false;
     }
@@ -33,7 +49,6 @@ export default function useAuth() {
     router.push('/login');
   };
 
-  // Get the API client with auth header
   const api = authService.getApiClient();
 
   return {
